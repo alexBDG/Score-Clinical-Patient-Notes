@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Kaggle dataset
+nbme-score-clinical-patient-notes
