@@ -16,7 +16,9 @@ Then you should have the correct working space, such as:
 ```
 Score-Clinical-Patient-Notes
 │   README.md
-│   .gitignore    
+│   .gitignore
+|   requirements.txt
+|   exploration.py
 │
 └───nbme-score-clinical-patient-notes
     │   features.csv
