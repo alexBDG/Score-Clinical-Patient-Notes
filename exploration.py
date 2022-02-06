@@ -63,25 +63,28 @@ class ExplorePatientNotes(ExploreFile):
             start = time.time()
         self.vectorize = CountVectorizer()
         X_train = self.vectorize.fit_transform(self.df["pn_history"])
+        
         if self.verbose>0:
             print("[VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
 
         if self.verbose>0:
             print("[VECTORIZE] counting & sorting...")
             start = time.time()
-        X_train = X_train.toarray()
-        X_c = X_train.sum(0)
-        X_b = np.argsort(X_c)
+            X_train = X_train.toarray()
+            X_c = X_train.sum(0)
+            X_b = np.argsort(X_c)
+            
         if self.verbose>0:
             print("[VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
 
         if self.verbose>0:
             print("[VECTORIZE] get names...")
-        self.words = np.array(self.vectorize.get_feature_names_out())
-        self.all_words = np.hstack([
-            np.array([w]*c, dtype='U100') for w, c
-            in zip(self.words[X_b][-50:], X_c[X_b][-50:])
-        ])[::-1]
+            self.words = np.array(self.vectorize.get_feature_names_out())
+            self.all_words = np.hstack([
+                np.array([w]*c, dtype='U100') for w, c 
+                in zip(self.words[X_b][-50:], X_c[X_b][-50:])
+                ])[::-1]
+            
         if self.verbose>0:
             print("[VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
 
