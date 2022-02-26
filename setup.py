@@ -2,7 +2,7 @@
 """
 Created on Sun Feb  6 19:24:19 2022
 
-@author: Shion Pavlichenko
+@author: Anas Hafid
 """
 import subprocess
 import sys

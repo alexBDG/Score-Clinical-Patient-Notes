@@ -97,14 +97,20 @@ class ExplorePatientNotes(ExploreFile):
 
 
     def compute_tfidf(self):
-
+        """
+        TF-IDF : Term Frequency-Inverse Document Frequency
+        Convert a collection of raw documents to a matrix 
+        of TF-IDF features.
+        """
         if self.verbose>0:
             print("[TF-IDF VECTORIZE] starting...")
             start = time.time()
+        # instantiate the vectorizer object
         vectorizer = TfidfVectorizer(
             stop_words='english', ngram_range=(1,1),
             max_df=.6, min_df=.01
         )
+        # convert the documents into a matrix
         X = vectorizer.fit_transform([
             '\n\n'.join(self.df[self.df['case_num']==case]["pn_history"].tolist())
             for case in self.df['case_num'].unique()
@@ -115,6 +121,7 @@ class ExplorePatientNotes(ExploreFile):
         if self.verbose>0:
             print("[TF-IDF VECTORIZE] densifing...")
             start = time.time()
+        #retrieve the terms found in the corpora
         feature_names = vectorizer.get_feature_names_out()
         dense = X.todense()
         denselist = dense.tolist()
