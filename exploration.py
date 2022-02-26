@@ -63,33 +63,31 @@ class ExplorePatientNotes(ExploreFile):
 
 
     def count_words(self, ax):
+        def _print(msg):
+            if self.verbose>0:
+                print('[COUNT VECTORIZE]', msg)
 
-        if self.verbose>0:
-            print("[COUNT VECTORIZE] starting...")
-            start = time.time()
+        _print("starting...")
+        start = time.time()
         self.vectorize = CountVectorizer()
         X = self.vectorize.fit_transform(self.df["pn_history"])
-        if self.verbose>0:
-            print("[COUNT VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
+        _print("elapsed time {:.2f}s".format(time.time()-start))
 
-        if self.verbose>0:
-            print("[COUNT VECTORIZE] counting & sorting...")
-            start = time.time()
+        _print("counting & sorting...")
+        start = time.time()
         X = X.toarray()
         X_c = X.sum(0)
         X_b = np.argsort(X_c)
-        if self.verbose>0:
-            print("[COUNT VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
+        _print("elapsed time {:.2f}s".format(time.time()-start))
 
-        if self.verbose>0:
-            print("[COUNT VECTORIZE] get names...")
+        _print("get names...")
+        start = time.time()
         words = np.array(self.vectorize.get_feature_names_out())
         all_words = np.hstack([
             np.array([w]*c, dtype='U100') for w, c
             in zip(words[X_b][-50:], X_c[X_b][-50:])
         ])[::-1]
-        if self.verbose>0:
-            print("[COUNT VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
+        _print("elapsed time {:.2f}s".format(time.time()-start))
 
         # Now plot
         sns.countplot(x=all_words, ax=ax)
@@ -97,14 +95,16 @@ class ExplorePatientNotes(ExploreFile):
 
 
     def compute_tfidf(self):
+        """TF-IDF : Term Frequency-Inverse Document Frequency
+
+        Convert a collection of raw documents to a matrix of TF-IDF features.
         """
-        TF-IDF : Term Frequency-Inverse Document Frequency
-        Convert a collection of raw documents to a matrix 
-        of TF-IDF features.
-        """
-        if self.verbose>0:
-            print("[TF-IDF VECTORIZE] starting...")
-            start = time.time()
+        def _print(msg):
+            if self.verbose>0:
+                print('[TF-IDF VECTORIZE]', msg)
+
+        _print("starting...")
+        start = time.time()
         # instantiate the vectorizer object
         vectorizer = TfidfVectorizer(
             stop_words='english', ngram_range=(1,1),
@@ -112,25 +112,26 @@ class ExplorePatientNotes(ExploreFile):
         )
         # convert the documents into a matrix
         X = vectorizer.fit_transform([
-            '\n\n'.join(self.df[self.df['case_num']==case]["pn_history"].tolist())
+            '\n\n'.join(
+                self.df[self.df['case_num']==case]["pn_history"].tolist()
+            )
             for case in self.df['case_num'].unique()
         ])
-        if self.verbose>0:
-            print("[TF-IDF VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
+        _print("elapsed time {:.2f}s".format(time.time()-start))
 
-        if self.verbose>0:
-            print("[TF-IDF VECTORIZE] densifing...")
-            start = time.time()
-        #retrieve the terms found in the corpora
+        _print("densifing...")
+        start = time.time()
+        # retrieve the terms found in the corpora
         feature_names = vectorizer.get_feature_names_out()
         dense = X.todense()
         denselist = dense.tolist()
-        self.df_tfidf = pd.DataFrame(denselist, columns=feature_names).transpose()
+        self.df_tfidf = pd.DataFrame(
+            denselist, columns=feature_names
+        ).transpose()
         self.df_tfidf.columns = [
             'case_num: '+str(case) for case in self.df['case_num'].unique()
         ]
-        if self.verbose>0:
-            print("[TF-IDF VECTORIZE] elapsed time {:.2f}s".format(time.time()-start))
+        _print("elapsed time {:.2f}s".format(time.time()-start))
 
 
     def word_clood(self, ax, case):
