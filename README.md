@@ -17,15 +17,25 @@ Then you should have the correct working space, such as:
 Score-Clinical-Patient-Notes
 │   README.md
 │   .gitignore
-|   requirements.txt
-|   exploration.py
+│   requirements.txt
+│   main.ipynb
+│
+└───datasets
+│   │   __init__.py
+│   │   data.ipynb
+│   │   loading.py
+│   │   exploration.py
+│
+└───modelling
+│   │   __init__.py
+│   │   scoring.py
 │
 └───nbme-score-clinical-patient-notes
     │   features.csv
     │   patient_notes.csv
-    |   sample_submission.csv
-    |   test.csv
-    |   train.csv
+    │   sample_submission.csv
+    │   test.csv
+    │   train.csv
 ```
 
  3. Install all python libraries using `requirements.txt`.
@@ -39,5 +49,5 @@ usr@home:~$ pip install -r requirements.txt
 ## Data exploration
 Start to explore the input data...
 ```console
-usr@home:~$ python exploration.py
+usr@home:~$ python datasets/exploration.py
 ```
