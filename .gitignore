@@ -130,3 +130,7 @@ dmypy.json
 
 # Kaggle dataset
 nbme-score-clinical-patient-notes
+
+# Saved models
+output/models
+output/weights

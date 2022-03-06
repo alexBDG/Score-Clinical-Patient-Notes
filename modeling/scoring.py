@@ -9,8 +9,8 @@ https://www.kaggle.com/theoviel/evaluation-metric-folds-baseline
 # System imports.
 import numpy as np
 import tensorflow as tf
-from tf.keras.metrics import Metric
 from sklearn.metrics import f1_score
+from tensorflow.keras.metrics import Metric
 
 
 
